@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'PreRequisites',
       through: 'CoursePrereq'
     });
+    Course.belongsToMany(models.Program, {
+      through: models.DegreePlans,
+      foreignKey: 'courseId'
+    });
   };
   return Course;
 };

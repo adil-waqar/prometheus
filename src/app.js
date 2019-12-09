@@ -17,7 +17,7 @@ app.get('*', (req, res) => {
 const port = 1234;
 
 db.sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     app.listen(port, () => {
       console.log(`Server started on port: ${port}`);

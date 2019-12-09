@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE'
     });
     Program.hasMany(models.Student);
+    Program.belongsToMany(models.Course, {
+      through: models.DegreePlans,
+      foreignKey: 'programId'
+    });
   };
+
   return Program;
 };
