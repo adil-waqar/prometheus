@@ -14,11 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Student.associate = function(models) {
+  Student.associate = models => {
     Student.belongsToMany(models.Course, {
       through: 'StudentCourses',
       foreignKey: 'studentId'
     });
+    Student.belongsTo(models.Program);
   };
   return Student;
 };
