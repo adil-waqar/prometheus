@@ -1,12 +1,12 @@
 const express = require('express');
-const logger = require('morgan');
 const { db } = require('./models');
 const app = express();
-
+const morganBody = require('morgan-body');
+const log = require('./logger');
 // Middlewares
 app.use(express.json());
-app.use(logger('dev'));
 app.use(express.urlencoded({ extended: false }));
+morganBody(app);
 
 require('./api/routes')(app);
 app.get('*', (req, res) => {
@@ -20,7 +20,7 @@ db.sequelize
   .sync({ force: false })
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server started on port: ${port}`);
+      log.debug('Server started on', port);
     });
   })
   .catch(err => {
