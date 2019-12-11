@@ -23,6 +23,20 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           cch: 3
+        },
+        {
+          id: 'CS103',
+          name: 'Very intense programming',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          cch: 3
+        },
+        {
+          id: 'CE233',
+          name: 'Database Management System',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          cch: 3
         }
       ],
       {}

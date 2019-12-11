@@ -24,6 +24,7 @@ module.exports = app => {
   app.get('/api/courses', setToken, verifyToken, isDean, courseController.list);
   // 2. Department view: Set degree plan and prereqs
   app.post('/api/degree-plan', degreePlanController.create);
+  app.get('/api/degree-plan/:programId', degreePlanController.retrieve);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);

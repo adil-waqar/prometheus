@@ -1,12 +1,12 @@
 const express = require('express');
 const { db } = require('./models');
 const app = express();
-const morganBody = require('morgan-body');
+const morgan = require('morgan');
 const log = require('./logger');
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-morganBody(app);
+app.use(morgan('dev'));
 
 require('./api/routes')(app);
 app.get('*', (req, res) => {
@@ -24,5 +24,5 @@ db.sequelize
     });
   })
   .catch(err => {
-    console.log(`Database sync failed with error: ${err}`);
+    log.debug('Database sync failed with error:', err);
   });
