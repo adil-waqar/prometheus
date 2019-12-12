@@ -3,19 +3,19 @@ const { db } = require('./models');
 const app = express();
 const morgan = require('morgan');
 const log = require('./logger');
+const port = 1234;
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-require('./api/routes')(app);
-app.get('*', (req, res) => {
-  res.status(200).send({ message: 'You have ended up in a catch all route!' });
-});
+try {
+  require('./api/routes')(app);
+} catch (error) {
+  log.error(error);
+}
 
 // Starting up server
-const port = 1234;
-
 db.sequelize
   .sync({ force: false })
   .then(() => {

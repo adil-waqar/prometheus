@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.STRING,
-        primaryKey: true
+        primaryKey: true,
+        unique: true
       },
       name: {
         type: DataTypes.STRING,
@@ -14,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Program.associate = models => {
+    Program.hasMany(models.Plo, {
+      foreignKey: {
+        primaryKey: true
+      }
+    });
     Program.belongsTo(models.Department, {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
