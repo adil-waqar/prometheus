@@ -7,6 +7,8 @@ const ploCourseController = require('../../controllers').ploCourse;
 const { setToken, verifyToken, isDean } = require('../middleware');
 
 module.exports = app => {
+  // Auth route
+  app.post('/api/login', loginController.getToken);
   // 1. Department view: Manage offered courses
   app.post(
     '/api/courses',
@@ -25,16 +27,39 @@ module.exports = app => {
   app.put('/api/courses', setToken, verifyToken, isDean, courseController.put);
   app.get('/api/courses', setToken, verifyToken, isDean, courseController.list);
   // 2. Department view: Set degree plan and prereqs
-  app.post('/api/degree-plan', degreePlanController.create);
-  app.get('/api/degree-plan/:programId', degreePlanController.retrieve);
+  app.post(
+    '/api/degree-plan',
+    setToken,
+    verifyToken,
+    isDean,
+    degreePlanController.create
+  );
+  app.get(
+    '/api/degree-plan/:programId',
+    setToken,
+    verifyToken,
+    isDean,
+    degreePlanController.retrieve
+  );
   //3. Department view: Manage PLOs
-  app.post('/api/program/plos', ploProgramController.create);
+  app.post(
+    '/api/program/plos',
+    setToken,
+    verifyToken,
+    isDean,
+    ploProgramController.create
+  );
   //4. Department vieW: Course PLO mapping
-  app.post('/api/program/courses-plos', ploCourseController.create);
+  app.post(
+    '/api/program/courses-plos',
+    setToken,
+    verifyToken,
+    isDean,
+    ploCourseController.create
+  );
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
-  app.post('/api/login', loginController.getToken);
   app.get('*', (req, res) => {
     res
       .status(200)

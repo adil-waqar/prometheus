@@ -1,15 +1,15 @@
+const log = require('./logger');
 const express = require('express');
 const { db } = require('./models');
 const app = express();
 const morgan = require('morgan');
-const log = require('./logger');
 const port = 1234;
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(morgan('dev'));
 
 try {
+  // Middlewares
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(morgan('dev'));
   require('./api/routes')(app);
 } catch (error) {
   log.error(error);
