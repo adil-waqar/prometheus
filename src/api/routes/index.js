@@ -31,7 +31,7 @@ module.exports = app => {
   app.post('/api/program/plos', ploProgramController.create);
   //4. Department vieW: Course PLO mapping
   app.post('/api/program/courses-plos', ploCourseController.create);
-  app.get('/api/:programId/courses-plos', ploCourseController.retrieve);
+  app.get('/api/courses-plos/:programId', ploCourseController.retrieve);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
