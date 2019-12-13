@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Employee',
     {
       id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         primaryKey: true
       },
       name: {

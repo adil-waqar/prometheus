@@ -6,6 +6,7 @@ const ploProgramController = require('../../controllers').ploProgram;
 const ploCourseController = require('../../controllers').ploCourse;
 const { setToken, verifyToken, isDean } = require('../middleware');
 const semesterController = require('../../controllers').semester;
+const assessmentsController = require('../../controllers').assessment;
 module.exports = app => {
   // Auth route
   app.post('/api/login', loginController.getToken);
@@ -62,12 +63,13 @@ module.exports = app => {
   //5. Contoller Examination view: Manage offered semester
   app.post('/api/term/year', semesterController.create);
   app.post('/api/term/year/courses', semesterController.offerCourses);
+  //7. Instructor View: Manage Course Assessments
+  app.post('/api/course/assessments', assessmentsController.create);
+  app.post('/api/course/assessments/results', assessmentsController.addResult);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
   app.get('*', (req, res) => {
-    res
-      .status(200)
-      .send({ message: 'You have ended up in a catch all route!' });
+    res.status(403).send({ message: 'Method not allowed' });
   });
 };
