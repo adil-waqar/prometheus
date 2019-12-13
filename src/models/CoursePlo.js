@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       courseId: {
         type: DataTypes.STRING,
-        primaryKey: true,
+        allowNull: false,
         references: {
           model: 'Course',
           key: 'id'
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       ploId: {
         type: DataTypes.STRING,
-        primaryKey: true,
+        allowNull: false,
         references: {
           model: 'Plo',
           key: 'id'
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       programId: {
         type: DataTypes.STRING,
-        primaryKey: true,
+        allowNull: false,
         references: {
           model: 'Programs',
           key: 'id'

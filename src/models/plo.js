@@ -4,10 +4,10 @@ module.exports = (sequelize, DataTypes) => {
   const Plo = sequelize.define(
     'Plo',
     {
-      id: {
+      no: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        unique: true
+        allowNull: false,
+        unique: 'compositeIndex'
       },
       threshold: {
         type: DataTypes.INTEGER,
@@ -16,15 +16,22 @@ module.exports = (sequelize, DataTypes) => {
           min: 0,
           max: 100
         }
+      },
+      programId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: 'Programs',
+          key: 'id'
+        },
+        unique: 'compositeIndex'
       }
     },
     {}
   );
   Plo.associate = models => {
     Plo.belongsTo(models.Program, {
-      foreignKey: {
-        primaryKey: true
-      },
+      foreignKey: 'programId',
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });

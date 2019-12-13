@@ -5,7 +5,7 @@ const degreePlanController = require('../../controllers').degreePlan;
 const ploProgramController = require('../../controllers').ploProgram;
 const ploCourseController = require('../../controllers').ploCourse;
 const { setToken, verifyToken, isDean } = require('../middleware');
-
+const semesterController = require('../../controllers').semester;
 module.exports = app => {
   // Auth route
   app.post('/api/login', loginController.getToken);
@@ -25,7 +25,7 @@ module.exports = app => {
     courseController.delete
   );
   app.put('/api/courses', setToken, verifyToken, isDean, courseController.put);
-  app.get('/api/courses', setToken, verifyToken, isDean, courseController.list);
+  app.get('/api/courses', courseController.list);
   // 2. Department view: Set degree plan and prereqs
   app.post(
     '/api/degree-plan',
@@ -59,6 +59,9 @@ module.exports = app => {
   );
   app.post('/api/program/courses-plos', ploCourseController.create);
   app.get('/api/courses-plos/:programId', ploCourseController.retrieve);
+  //5. Contoller Examination view: Manage offered semester
+  app.post('/api/term/year', semesterController.create);
+  app.post('/api/term/year/courses', semesterController.offerCourses);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
