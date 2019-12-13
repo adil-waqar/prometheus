@@ -16,9 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Program.associate = models => {
     Program.hasMany(models.Plo, {
-      foreignKey: {
-        primaryKey: true
-      }
+      foreignKey: 'programId'
     });
     Program.belongsTo(models.Department, {
       onDelete: 'CASCADE',
