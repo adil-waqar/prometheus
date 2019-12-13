@@ -60,12 +60,9 @@ module.exports = app => {
   app.post('/api/program/courses-plos', ploCourseController.create);
   app.get('/api/courses-plos/:programId', ploCourseController.retrieve);
   //5. Contoller Examination view: Manage offered semester
-<<<<<<< HEAD
   app.post('/api/semester/year/term', semesterController.create);
-=======
   app.post('/api/term/year', semesterController.create);
   app.post('/api/term/year/courses', semesterController.offerCourses);
->>>>>>> ad906c9921c5a2b9a18f81e5b7759902a232a289
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
