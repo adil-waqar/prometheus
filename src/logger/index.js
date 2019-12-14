@@ -1,10 +1,10 @@
 const bunyan = require('bunyan');
-const level = 'debug';
+require('dotenv').config();
 
 const log = bunyan.createLogger({
   name: 'Prometheus',
   stream: process.stdout,
-  level
+  level: process.env.LOG_LEVEL
 });
 
 module.exports = log;

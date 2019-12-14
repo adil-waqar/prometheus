@@ -4,9 +4,12 @@ const loginController = require('../../controllers').login;
 const degreePlanController = require('../../controllers').degreePlan;
 const ploProgramController = require('../../controllers').ploProgram;
 const ploCourseController = require('../../controllers').ploCourse;
-const { setToken, verifyToken, isDean } = require('../middleware');
+const { setToken, verifyToken, auth } = require('../middleware');
 const semesterController = require('../../controllers').semester;
 const assessmentsController = require('../../controllers').assessment;
+const cloController = require('../../controllers').clo;
+const cloPloController = require('../../controllers').cloPlo;
+
 module.exports = app => {
   // Auth route
   app.post('/api/login', loginController.getToken);
@@ -15,31 +18,43 @@ module.exports = app => {
     '/api/courses',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     courseController.create
   );
   app.delete(
     '/api/courses/:courseId',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     courseController.delete
   );
-  app.put('/api/courses', setToken, verifyToken, isDean, courseController.put);
-  app.get('/api/courses', courseController.list);
+  app.put(
+    '/api/courses',
+    setToken,
+    verifyToken,
+    auth.isDean,
+    courseController.put
+  );
+  app.get(
+    '/api/courses',
+    setToken,
+    verifyToken,
+    auth.isDean,
+    courseController.list
+  );
   // 2. Department view: Set degree plan and prereqs
   app.post(
     '/api/degree-plan',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     degreePlanController.create
   );
   app.get(
     '/api/degree-plan/:programId',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     degreePlanController.retrieve
   );
   //3. Department view: Manage PLOs
@@ -47,7 +62,7 @@ module.exports = app => {
     '/api/program/plos',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     ploProgramController.create
   );
   //4. Department vieW: Course PLO mapping
@@ -55,7 +70,7 @@ module.exports = app => {
     '/api/program/courses-plos',
     setToken,
     verifyToken,
-    isDean,
+    auth.isDean,
     ploCourseController.create
   );
   app.post('/api/program/courses-plos', ploCourseController.create);
@@ -66,10 +81,12 @@ module.exports = app => {
   //7. Instructor View: Manage Course Assessments
   app.post('/api/course/assessments', assessmentsController.create);
   app.post('/api/course/assessments/results', assessmentsController.addResult);
+  app.post('/api/courses/:courseId/clos', cloController.create);
+  app.post('/api/courses/:courseId/clos/plos', cloPloController.create);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
-  app.get('*', (req, res) => {
+  app.all('*', (req, res) => {
     res.status(403).send({ message: 'Method not allowed' });
   });
 };
