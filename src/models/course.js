@@ -38,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
       through: models.OfferedCourse,
       foreignKey: 'courseId'
     });
+    Course.hasMany(models.Clo, {
+      foreignKey: 'courseId'
+    });
   };
   return Course;
 };

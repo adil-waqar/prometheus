@@ -20,7 +20,7 @@ db.sequelize
   .sync({ force: false })
   .then(() => {
     app.listen(process.env.PORT, () => {
-      log.debug('Server started on', process.env.PORT);
+      log.info('Server started on', process.env.PORT);
     });
   })
   .catch(err => {

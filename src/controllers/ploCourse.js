@@ -16,8 +16,8 @@ module.exports = {
         try {
           let plo = await Plo.findOne({
             where: {
-              id: map.ploId,
-              ProgramId: programId
+              no: map.ploNo,
+              programId
             }
           });
           if (!plo) {
