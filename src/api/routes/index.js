@@ -81,6 +81,10 @@ module.exports = app => {
   //7. Instructor View: Manage Course Assessments
   app.post('/api/course/assessments', assessmentsController.create);
   app.post('/api/course/assessments/results', assessmentsController.addResult);
+  app.post(
+    '/api/courses/:courseId/clos/assessments',
+    assessmentsController.createCloAssessment
+  );
   app.post('/api/courses/:courseId/clos', cloController.create);
   app.post('/api/courses/:courseId/clos/plos', cloPloController.create);
   // Dangling routes

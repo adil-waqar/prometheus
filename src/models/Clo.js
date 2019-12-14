@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     Clo.hasOne(models.CloPloMapping, {
       foreignKey: 'cloId'
     });
+    Clo.hasOne(models.CloAssessment, {
+      foreignKey: 'cloId'
+    });
   };
   return Clo;
 };
