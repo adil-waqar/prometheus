@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'studentId'
     });
     Student.belongsTo(models.Program);
+    Student.hasMany(models.AssessmentResult, {
+      foreignKey: 'studentId'
+    });
   };
   return Student;
 };

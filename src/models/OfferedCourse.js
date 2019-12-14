@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       employeeId: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: 'Employees',
@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  OfferedCourse.associate = models => {};
+  OfferedCourse.associate = models => {
+    OfferedCourse.hasMany(models.CourseAssessment, {
+      foreignKey: 'offeredCourseId'
+    });
+  };
   return OfferedCourse;
 };
