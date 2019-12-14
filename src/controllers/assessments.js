@@ -2,9 +2,12 @@ const log = require('../logger');
 const { OfferedCourse } = require('../models').db;
 const { CourseAssessment } = require('../models').db;
 const { AssessmentResult } = require('../models').db;
+const { CloAssessment } = require('../models').db;
 const { Student } = require('../models').db;
+const { Clo } = require('../models').db;
+
 module.exports = {
-  async create(req, res) {
+  create: async (req, res) => {
     try {
       log.info('Course assessments are being added');
       const { courseId, employeeId, assessments } = req.body;
@@ -82,6 +85,47 @@ module.exports = {
       return res
         .status(400)
         .send({ message: 'Unexpected error while adding results' });
+    }
+  },
+  createCloAssessment: async (req, res) => {
+    try {
+      log.info('Creating CLO assessments');
+      const { criteria } = req.body;
+      const courseId = req.params.courseId;
+      const cloAssessments = [];
+      for (let cloCriteria of criteria) {
+        let clo = await Clo.findOne({
+          where: {
+            courseId,
+            no: cloCriteria.clo
+          }
+        });
+        if (!clo) {
+          log.debug('Clo is not mapped to the course specified');
+          return res
+            .status(404)
+            .send({ message: 'Clo is not mapped to the course specified' });
+        }
+        let cloCriteriaInstance = await CloAssessment.create({
+          cloId: clo.id,
+          quiz: cloCriteria.quiz,
+          assignment: cloCriteria.assignment,
+          mid: cloCriteria.mid,
+          final: cloCriteria.final,
+          threshold: cloCriteria.threshold
+        });
+        cloAssessments.push(cloCriteriaInstance);
+      }
+      log.info('All CLO assessments have been added');
+      return res.status(201).send({
+        message: 'All CLO assessments have been added',
+        clos: cloAssessments
+      });
+    } catch (error) {
+      log.error(error);
+      return res
+        .status(400)
+        .send({ message: 'Unexpected error occured', error: error.name });
     }
   }
 };
