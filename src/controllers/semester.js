@@ -79,5 +79,71 @@ module.exports = {
         Message: 'An unexpected error occured while offering courses'
       });
     }
+  },
+  async delete(req, res) {
+    try {
+      let termVal = await Semester.findOne({
+        where: {
+          term: req.params.term,
+          year: req.params.year
+        }
+      });
+      if (!termVal) {
+        log.info('Term does not exist');
+        return res.status(400).send({
+          message: 'term does not exist'
+        });
+      }
+      let termdel = await termVal.destroy();
+      log.info('Term deleted', termdel);
+      return res.status(200).send(termdel);
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
+  },
+  async put(req, res) {
+    try {
+      let termVal = await Semester.findOne({
+        where: {
+          term: req.params.term,
+          year: req.params.year
+        }
+      });
+      if (!termVal) {
+        log.info('Term does not exist');
+        return res.status(400).send({
+          message: 'term does not exist'
+        });
+      }
+      let updateTerm = await termVal.update({
+        term: req.body.term || termVal.term,
+        year: req.body.year || termVal.year
+      });
+      if (!updateTerm) {
+        log.info('Update not successful');
+        return res.status(400).send({ message: 'Update not successful' });
+      }
+      log.info('Update successful');
+      return res
+        .status(200)
+        .send({ message: 'Update done successfully', updateTerm });
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
+  },
+  async list(req, res) {
+    try {
+      let term = await Semester.findAll();
+      if (!term) {
+        log.debug('No term exists');
+        return res.status(404).send({ message: 'No term exists' });
+      }
+      return res.status(200).send(term);
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
   }
 };

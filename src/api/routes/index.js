@@ -76,8 +76,10 @@ module.exports = app => {
   app.post('/api/program/courses-plos', ploCourseController.create);
   app.get('/api/courses-plos/:programId', ploCourseController.retrieve);
   //5. Contoller Examination view: Manage offered semester
-  app.post('/api/semester/year/term', semesterController.create);
+  app.delete('/api/:term/:year', semesterController.delete);
+  app.put('/api/:term/:year', semesterController.put);
   app.post('/api/term/year', semesterController.create);
+  app.get('/api/term/year', semesterController.list);
   app.post('/api/term/year/courses', semesterController.offerCourses);
   //7. Instructor View: Manage Course Assessments
   app.post('/api/course/assessments', assessmentsController.create);
