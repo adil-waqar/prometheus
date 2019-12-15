@@ -4,7 +4,7 @@ const { CourseAssessment } = require('../models').db;
 const { AssessmentResult } = require('../models').db;
 const { CloAssessment } = require('../models').db;
 const { Student } = require('../models').db;
-const { Clo } = require('../models').db;
+const { Clo, Semester } = require('../models').db;
 
 module.exports = {
   create: async (req, res) => {
@@ -90,13 +90,31 @@ module.exports = {
   createCloAssessment: async (req, res) => {
     try {
       log.info('Creating CLO assessments');
-      const { criteria } = req.body;
+      const { criteria, term, year } = req.body;
       const courseId = req.params.courseId;
       const cloAssessments = [];
+      let termId = await Semester.findOne({
+        where: {
+          term,
+          year
+        }
+      });
+      if (!termId)
+        return res.status(404).send({ message: 'Semester not offfered yet' });
+      let offering = await OfferedCourse.findOne({
+        where: {
+          courseId,
+          termId: termId.id
+        }
+      });
+      if (!offering)
+        return res
+          .status(404)
+          .send({ message: 'The course has not been offered yet.' });
       for (let cloCriteria of criteria) {
         let clo = await Clo.findOne({
           where: {
-            courseId,
+            offeredCourseId: offering.id,
             no: cloCriteria.clo
           }
         });
