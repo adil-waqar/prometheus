@@ -41,6 +41,93 @@ module.exports = {
       res.status(400).send({ message: error.message, error: error.name });
     }
   },
+  async delete(req, res) {
+    try {
+      let termVal = await Semester.findOne({
+        where: {
+          term: req.body.term,
+          year: req.body.year
+        }
+      });
+      if (!termVal) {
+        log.info('Term does not exist');
+        return res.status(400).send({
+          message: 'term does not exist'
+        });
+      }
+      let course = await OfferedCourse.findOne({
+        where: {
+          courseId: req.params.courseId,
+          termId: termVal.id
+        }
+      });
+      if (!course) {
+        log.info('Course Offered does not exist');
+        return res.status(400).send({
+          message: 'Course Offered does not exist'
+        });
+      }
+      let cloVal = await Clo.findOne({
+        where: {
+          offeredCourseId: course.id,
+          no: req.body.no
+        }
+      });
+      if (!cloVal) {
+        log.info('Clo entry does not exist');
+        return res.status(400).send({
+          message: 'Clo entry does not exist'
+        });
+      }
+      let clodel = await cloVal.destroy();
+      log.info('Clo deleted', clodel);
+      return res.status(200).send(clodel);
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
+  },
+  async list(req, res) {
+    try {
+      let termVal = await Semester.findOne({
+        where: {
+          term: req.body.term,
+          year: req.body.year
+        }
+      });
+      if (!termVal) {
+        log.info('Term does not exist');
+        return res.status(400).send({
+          message: 'Term does not exist'
+        });
+      }
+      let course = await OfferedCourse.findOne({
+        where: {
+          courseId: req.params.courseId,
+          termId: termVal.id
+        }
+      });
+      if (!course) {
+        log.info('Course Offered does not exist');
+        return res.status(400).send({
+          message: 'Course Offered does not exist'
+        });
+      }
+      let cloList = await Clo.findAll({
+        where: {
+          offeredCourseId: course.id
+        }
+      });
+      if (!cloList) {
+        log.info('No clo exists');
+        return res.status(404).send({ message: 'No clo exists' });
+      }
+      return res.status(200).send(cloList);
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
+  },
   async calculateResults(req, res) {
     try {
       // Pending: Have to verify that incoming req auth matches the employee course

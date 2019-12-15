@@ -89,17 +89,19 @@ module.exports = app => {
     '/api/courses/:courseId/clos/assessments',
     assessmentsController.createCloAssessment
   );
+  //8. Instructor view: Manage CLOs
   app.post('/api/courses/:courseId/clos', cloController.create);
-  app.post('/api/courses/:courseId/clos', cloController.put);
   app.get('/api/courses/:courseId/clos', cloController.list);
   app.delete('/api/courses/:courseId/clos', cloController.delete);
+  //9. Controller Examination View: Get PLO transcript
+  app.post('/api/programs/:programId/plos/calculate', ploController.calculate);
+  app.get('/api/programs/:programId/plos/', ploController.list);
+  // Dangling routes
   app.post('/api/courses/:courseId/clos/plos', cloPloController.create);
   app.get(
     '/api/courses/:courseId/results/:term/:year',
     cloController.calculateResults
   );
-  app.post('/api/programs/:programId/plos/calculate', ploController.calculate);
-  // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
   app.all('*', (req, res) => {
