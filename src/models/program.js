@@ -22,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
     });
-    Program.hasMany(models.Student);
+    Program.hasMany(models.Student, {
+      foreignKey: 'programId'
+    });
     Program.belongsToMany(models.Course, {
       through: models.DegreePlans,
       foreignKey: 'programId'

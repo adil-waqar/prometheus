@@ -8,6 +8,7 @@ const semester = require('./semester');
 const assessment = require('./assessments');
 const clo = require('./clo');
 const cloPlo = require('./cloPlo');
+const plo = require('./plo');
 
 module.exports = {
   course,
@@ -19,5 +20,6 @@ module.exports = {
   semester,
   assessment,
   clo,
-  cloPlo
+  cloPlo,
+  plo
 };
