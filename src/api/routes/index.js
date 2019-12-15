@@ -74,31 +74,128 @@ module.exports = app => {
     auth.isDean,
     ploCourseController.create
   );
-  app.post('/api/program/courses-plos', ploCourseController.create);
-  app.get('/api/courses-plos/:programId', ploCourseController.retrieve);
+  app.get(
+    '/api/courses-plos/:programId',
+    setToken,
+    verifyToken,
+    auth.isDean,
+    ploCourseController.retrieve
+  );
   //5. Contoller Examination view: Manage offered semester
-  app.delete('/api/:term/:year', semesterController.delete);
-  app.put('/api/:term/:year', semesterController.put);
-  app.post('/api/term/year', semesterController.create);
-  app.get('/api/term/year', semesterController.list);
-  app.post('/api/term/year/courses', semesterController.offerCourses);
+  app.delete(
+    '/api/:term/:year',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    semesterController.delete
+  );
+  app.put(
+    '/api/:term/:year',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    semesterController.put
+  );
+  app.post(
+    '/api/term/year',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    semesterController.create
+  );
+  app.get(
+    '/api/term/year',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    semesterController.list
+  );
+  app.post(
+    '/api/term/year/courses',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    semesterController.offerCourses
+  );
   //7. Instructor View: Manage Course Assessments
-  app.post('/api/course/assessments', assessmentsController.create);
-  app.post('/api/course/assessments/results', assessmentsController.addResult);
+  app.post(
+    '/api/course/assessments',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    assessmentsController.create
+  );
+  app.post(
+    '/api/course/assessments/results',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    assessmentsController.addResult
+  );
   app.post(
     '/api/courses/:courseId/clos/assessments',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
     assessmentsController.createCloAssessment
   );
-  app.post('/api/courses/:courseId/clos', cloController.create);
-  app.post('/api/courses/:courseId/clos/plos', cloPloController.create);
+  app.post(
+    '/api/courses/:courseId/clos',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloController.create
+  );
+  app.post(
+    '/api/courses/:courseId/clos/plos',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloPloController.create
+  );
   app.get(
     '/api/courses/:courseId/results/:term/:year',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
     cloController.calculateResults
   );
-  app.post('/api/programs/:programId/plos/calculate', ploController.calculate);
+  app.post(
+    '/api/programs/:programId/plos/calculate',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    ploController.calculate
+  );
+  app.get(
+    '/api/courses/:courseId/clo-assessments',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloController.retrieveAssessments
+  );
+  app.delete(
+    '/api/courses/:courseId/clos/:cloNo/assessment',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloController.deleteAssessment
+  );
   // Dangling routes
-  app.post('/api/student', studentController.create);
-  app.post('/api/course/student', studentController.enroll);
+  app.post(
+    '/api/student',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    studentController.create
+  );
+  app.post(
+    '/api/course/student',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    studentController.enroll
+  );
   app.all('*', (req, res) => {
     res.status(403).send({ message: 'Method not allowed' });
   });

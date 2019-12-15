@@ -5,7 +5,8 @@ module.exports = {
   create(req, res) {
     return Student.create({
       id: req.body.id,
-      name: req.body.name
+      name: req.body.name,
+      programId: req.body.programId
     })
       .then(student => res.status(201).send(student))
       .catch(err => res.status(400).send(err));
