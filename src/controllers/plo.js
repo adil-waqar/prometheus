@@ -117,7 +117,6 @@ module.exports = {
               threshold,
               result: status
             });
-            log.debug('Plo result created for', student.id, ploInstance);
           } else {
             let updatedPercentAchieved =
               percentAchieved + ploResult.dataValues.percentAchieved;
@@ -131,14 +130,10 @@ module.exports = {
               percentAchieved: updatedPercentAchieved,
               result: updatedResult
             });
-            log.debug(
-              'PLO result for student updated',
-              student.id,
-              updatedPloResult
-            );
           }
         }
       }
+      log.info('PLO results have been calculated');
       return res
         .status(201)
         .send({ message: 'PLO results have been calculated' });
