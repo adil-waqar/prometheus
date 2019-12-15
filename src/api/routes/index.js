@@ -89,6 +89,9 @@ module.exports = app => {
     assessmentsController.createCloAssessment
   );
   app.post('/api/courses/:courseId/clos', cloController.create);
+  app.post('/api/courses/:courseId/clos', cloController.put);
+  app.get('/api/courses/:courseId/clos', cloController.list);
+  app.delete('/api/courses/:courseId/clos', cloController.delete);
   app.post('/api/courses/:courseId/clos/plos', cloPloController.create);
   app.get(
     '/api/courses/:courseId/results/:term/:year',
