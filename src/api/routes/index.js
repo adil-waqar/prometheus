@@ -139,13 +139,7 @@ module.exports = app => {
     auth.isInstructor,
     assessmentsController.createCloAssessment
   );
-  app.post(
-    '/api/courses/:courseId/clos',
-    setToken,
-    verifyToken,
-    auth.isInstructor,
-    cloController.create
-  );
+
   app.post(
     '/api/courses/:courseId/clos/plos',
     setToken,
@@ -153,19 +147,27 @@ module.exports = app => {
     auth.isInstructor,
     cloPloController.create
   );
-  app.get(
-    '/api/courses/:courseId/results/:term/:year',
+  //8. Instructor view: Manage CLOs
+  app.post(
+    '/api/courses/:courseId/clos',
     setToken,
     verifyToken,
     auth.isInstructor,
-    cloController.calculateResults
+    cloController.create
   );
-  app.post(
-    '/api/programs/:programId/plos/calculate',
+  app.get(
+    '/api/courses/:courseId/clos',
     setToken,
     verifyToken,
-    auth.isControllerExamination,
-    ploController.calculate
+    auth.isInstructor,
+    cloController.list
+  );
+  app.delete(
+    '/api/courses/:courseId/clos',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloController.delete
   );
   app.get(
     '/api/courses/:courseId/clo-assessments',
@@ -180,6 +182,37 @@ module.exports = app => {
     verifyToken,
     auth.isInstructor,
     cloController.deleteAssessment
+  );
+  //9. Controller Examination View: Get PLO transcript
+  app.post(
+    '/api/programs/:programId/plos/calculate',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    ploController.calculate
+  );
+  app.get(
+    '/api/programs/:programId/plos/',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    ploController.list
+  );
+  // Instructor
+  app.get(
+    '/api/courses/:courseId/results/:term/:year',
+    setToken,
+    verifyToken,
+    auth.isInstructor,
+    cloController.calculateResults
+  );
+  // Controller Examination
+  app.post(
+    '/api/programs/:programId/plos/calculate',
+    setToken,
+    verifyToken,
+    auth.isControllerExamination,
+    ploController.calculate
   );
   // Dangling routes
   app.post(

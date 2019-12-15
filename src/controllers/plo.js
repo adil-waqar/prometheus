@@ -141,5 +141,42 @@ module.exports = {
       log.error(error);
       return res.status(500).send({ name: error.name, error: error.message });
     }
+  },
+  async list(req, res) {
+    try {
+      const programId = req.params.programId;
+      // Get all of student that belong to the program
+      let program = await Program.findOne({
+        where: {
+          id: programId
+        }
+      });
+      if (!program) {
+        log.info('Program does not exist');
+        return res.status(404).send({ message: 'Program does not exist' });
+      }
+      let students = await program.getStudents();
+      if (students.length === 0) {
+        log.info('Students do not exist in the program');
+        return res
+          .status(404)
+          .send({ message: 'Students do not exist in the program' });
+      }
+      let studentResults = [];
+      for (let student of students) {
+        result = await PloResult.findAll({
+          where: {
+            studentId: student.id
+          },
+          attributes: ['studentId', 'ploId', 'result']
+        });
+        studentResults.push(result);
+      }
+      log.info('Transcript displayed');
+      return res.status(200).send({ studentResults });
+    } catch (error) {
+      log.error(error);
+      return res.status(500).send({ error: error.name });
+    }
   }
 };
