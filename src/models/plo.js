@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
     Plo.hasMany(models.CloPloMapping, {
       foreignKey: 'ploId'
     });
+    Plo.hasMany(models.PloResult, {
+      foreignKey: 'ploId',
+      as: 'PloDetails'
+    });
   };
   return Plo;
 };

@@ -2,16 +2,30 @@ const log = require('../logger');
 const { Course } = require('../models').db;
 const { CoursePlo } = require('../models').db;
 const { Plo } = require('../models').db;
-const { Clo } = require('../models').db;
-const { CloPloMapping } = require('../models').db;
+const { Clo, Semester } = require('../models').db;
+const { CloPloMapping, OfferedCourse } = require('../models').db;
 
 module.exports = {
   create: async (req, res) => {
     try {
-      const { mapping, programId } = req.body;
+      const { mapping, programId, term, year } = req.body;
       const courseId = req.params.courseId;
-      let course = await Course.findByPk(courseId);
-      if (!course) return res.status(404).send({ message: 'Course not found' });
+      let semester = await Semester.findOne({
+        where: {
+          term,
+          year
+        }
+      });
+      if (!semester)
+        return res.status(404).send({ message: 'Semester not offered yet' });
+      let offering = await OfferedCourse.findOne({
+        where: {
+          termId: semester.id,
+          courseId
+        }
+      });
+      if (!offering)
+        return res.status(404).send({ message: 'Course not offered yet' });
       let CloPloMappings = [];
       for (let map of mapping) {
         let plo = await Plo.findOne({
@@ -33,7 +47,7 @@ module.exports = {
         let clo = await Clo.findOne({
           where: {
             no: map.clo,
-            courseId
+            offeredCourseId: offering.id
           }
         });
         if (!clo)

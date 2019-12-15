@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      programId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: 'Programs',
+          key: 'id'
+        }
       }
     },
     {}
@@ -19,13 +27,19 @@ module.exports = (sequelize, DataTypes) => {
       through: 'StudentCourses',
       foreignKey: 'studentId'
     });
-    Student.belongsTo(models.Program);
+    Student.belongsTo(models.Program, {
+      foreignKey: 'programId'
+    });
     Student.hasMany(models.AssessmentResult, {
       foreignKey: 'studentId'
     });
     Student.belongsToMany(models.Clo, {
       through: models.CloResult,
       foreignKey: 'studentId'
+    });
+    Student.hasMany(models.PloResult, {
+      foreignKey: 'studentId',
+      as: 'StudentDetails'
     });
   };
   return Student;

@@ -9,6 +9,7 @@ const semesterController = require('../../controllers').semester;
 const assessmentsController = require('../../controllers').assessment;
 const cloController = require('../../controllers').clo;
 const cloPloController = require('../../controllers').cloPlo;
+const ploController = require('../../controllers').plo;
 
 module.exports = app => {
   // Auth route
@@ -94,6 +95,7 @@ module.exports = app => {
     '/api/courses/:courseId/results/:term/:year',
     cloController.calculateResults
   );
+  app.post('/api/programs/:programId/plos/calculate', ploController.calculate);
   // Dangling routes
   app.post('/api/student', studentController.create);
   app.post('/api/course/student', studentController.enroll);
