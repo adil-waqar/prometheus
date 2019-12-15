@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: 'compositeIndex'
       },
-      courseId: {
-        type: DataTypes.STRING,
+      offeredCourseId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         unique: 'compositeIndex',
         references: {
-          model: 'Courses',
+          model: 'OfferedCourses',
           key: 'id'
         },
         onDelete: 'CASCADE',
@@ -22,14 +22,22 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Clo.associate = models => {
-    Clo.belongsTo(models.Course, {
-      foreignKey: 'courseId'
+    Clo.belongsTo(models.OfferedCourse, {
+      foreignKey: 'offeredCourseId'
     });
     Clo.hasOne(models.CloPloMapping, {
       foreignKey: 'cloId'
     });
     Clo.hasOne(models.CloAssessment, {
       foreignKey: 'cloId'
+    });
+    Clo.belongsToMany(models.Student, {
+      through: models.CloResult,
+      foreignKey: 'cloId'
+    });
+    Clo.hasMany(models.CloResult, {
+      foreignKey: 'cloId',
+      as: 'CloDetails'
     });
   };
   return Clo;

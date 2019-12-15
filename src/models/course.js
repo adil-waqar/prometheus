@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Course.associate = models => {
-    Course.belongsToMany(models.Student, {
-      through: 'StudentCourses',
-      foreignKey: 'courseId'
-    });
     Course.belongsToMany(Course, {
       as: 'PreRequisites',
       through: 'CoursePrereq'
@@ -36,9 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     });
     Course.belongsToMany(models.Semester, {
       through: models.OfferedCourse,
-      foreignKey: 'courseId'
-    });
-    Course.hasMany(models.Clo, {
       foreignKey: 'courseId'
     });
   };

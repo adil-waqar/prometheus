@@ -15,12 +15,16 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Student.associate = models => {
-    Student.belongsToMany(models.Course, {
+    Student.belongsToMany(models.OfferedCourse, {
       through: 'StudentCourses',
       foreignKey: 'studentId'
     });
     Student.belongsTo(models.Program);
     Student.hasMany(models.AssessmentResult, {
+      foreignKey: 'studentId'
+    });
+    Student.belongsToMany(models.Clo, {
+      through: models.CloResult,
       foreignKey: 'studentId'
     });
   };

@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id'
         },
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
+        unique: true
       },
       quiz: {
         type: DataTypes.INTEGER,

@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     CourseAssessment.belongsTo(models.OfferedCourse, {
       foreignKey: 'offeredCourseId'
     });
-    CourseAssessment.hasOne(models.AssessmentResult, {
+    CourseAssessment.hasMany(models.AssessmentResult, {
       foreignKey: 'courseAssessmentId'
     });
   };
